@@ -1,0 +1,17 @@
+select * from `expense-tracker-57ca8.firestore_export.expenses_raw_latest`;
+
+create or replace view `expense-tracker-57ca8.firestore_export.expense_tracker_table` as 
+select
+  event_id as id,
+  JSON_VALUE(data, '$.reason') AS reason,
+  CAST(JSON_VALUE(data, '$.amount') AS FLOAT64) AS amount,
+  DATETIME(CONCAT(JSON_VALUE(data, '$.date'), ':00')) AS expense_dt,
+  case when 
+    lower(json_value(data, '$.reason')) IN ("mutual funds", "gold")
+    then "investment"
+    else "expense"
+    end as category, 
+  document_id AS document_id
+from `expense-tracker-57ca8.firestore_export.expenses_raw_latest`;
+
+select * from `expense-tracker-57ca8.firestore_export.expense_tracker_table`;
