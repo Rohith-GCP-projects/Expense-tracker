@@ -3,10 +3,13 @@
 <body>
   <h1>Add Expense</h1>  
     <form action="/submit" method="POST">
+        <input type="text" name="reason" placeholder="Reason" required>  
         <input type="number" name="amount" placeholder="Amount" required>
-        <input type="text" name="reason" placeholder="Reason" required>
         <input type="datetime-local" name="date">
         <button type="submit">Add</button>
+    </form>
+    <form action="/get_expenses" method="GET">
+      <button type="submit">View Expenses</button>
     </form>
 
 
