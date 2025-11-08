@@ -1,1 +1,8 @@
+# Environment
+.venv/
+.env
 firebase-key.json
+
+# Python
+__pycache__/
+*.pyc
