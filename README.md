@@ -1,4 +1,4 @@
-# RGCP Expense Tracker
+# GCP Expense Tracker
 This is the RGCP Expense Tracker, a lightweight Flask app that logs expenses to Firestore and serves both the input form and the ledger via `rohithshan.nidhushan.com`.
 
 ## Features
