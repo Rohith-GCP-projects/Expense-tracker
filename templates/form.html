@@ -1,19 +1,245 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GCP Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --panel-bg: rgba(18, 18, 20, 0.85);
+      --border: rgba(255, 255, 255, 0.25);
+      --accent: #9de0ff;
+      --shadow: 0 25px 45px rgba(0, 0, 0, 0.6);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "Noto Sans JP", system-ui, sans-serif;
+      background: radial-gradient(circle at top, #20233b 0%, #0b0c10 50%, #030303 100%);
+      min-height: 100vh;
+      color: #f5f5f5;
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      padding: 2rem;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(157, 224, 255, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.2), transparent 35%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    header {
+      z-index: 2;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.2em;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.4rem;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    header p {
+      margin: 0.4rem 0 0;
+      font-family: "Noto Sans JP", sans-serif;
+      color: #a9a9a9;
+    }
+
+    main {
+      position: relative;
+      width: min(480px, 100%);
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      backdrop-filter: blur(16px);
+      z-index: 1;
+    }
+
+    main::before {
+      content: "01";
+      position: absolute;
+      top: -20px;
+      right: 20px;
+      font-size: 3rem;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.07);
+    }
+
+    .panel-header {
+      margin-bottom: 1.5rem;
+      font-family: "Noto Sans JP", sans-serif;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-header span {
+      color: #8c8c8c;
+      font-size: 0.9rem;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.35rem;
+      color: #a5a5a5;
+    }
+
+    input {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      font-size: 1rem;
+      padding: 0.85rem 1rem;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(157, 224, 255, 0.2);
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 0.5rem;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 0.85rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(120deg, #29292f, #111216);
+      color: #fff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button.primary {
+      background: linear-gradient(120deg, #9de0ff, #5bb0ff);
+      color: #0b0c10;
+      box-shadow: 0 12px 30px rgba(157, 224, 255, 0.4);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    button.secondary {
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      background: transparent;
+    }
+
+    .status {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: #c2c2c2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .status span {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .status .tagline {
+      color: #9de0ff;
+      font-family: "Noto Sans JP", sans-serif;
+      font-weight: 700;
+    }
+
+    @media (max-width: 520px) {
+      body {
+        padding: 1.2rem;
+      }
+
+      main {
+        padding: 1.5rem;
+      }
+
+      .panel-header {
+        flex-direction: column;
+        gap: 0.3rem;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
 <body>
-  <h1>Add Expense</h1>  
+  <header>
+    <h1>GCP Expense Tracker</h1>
+    <!-- <p>Classic anime moodboard · Black &amp; Grey palette</p> -->
+  </header>
+  <main>
+    <div class="panel-header">
+      <div>
+        <p style="margin:0; font-size:1.125rem;">Log a mission</p>
+        <!-- <span>Inky nights · Stoic grids</span> -->
+      </div>
+      <span class="tagline">01 / Entries</span>
+    </div>
     <form action="/submit" method="POST">
-        <input type="text" name="reason" placeholder="Reason" required>  
-        <input type="number" name="amount" placeholder="Amount" required>
-        <input type="datetime-local" name="date">
-        <button type="submit">Add</button>
+      <div>
+        <label for="reason">Reason</label>
+        <input id="reason" name="reason" type="text" placeholder="E.g. Studio supplies" required>
+      </div>
+      <div>
+        <label for="amount">Amount</label>
+        <input id="amount" name="amount" type="number" placeholder="e.g. 42" step="0.01" required>
+      </div>
+      <div>
+        <label for="date">Date</label>
+        <input id="date" name="date" type="datetime-local">
+      </div>
+      <div class="button-group">
+        <button class="primary" type="submit">Add Expense</button>
+        <button class="secondary" type="button" onclick="window.location.href='/get_expenses'">
+          Review Ledger
+        </button>
+      </div>
     </form>
-    <form action="/get_expenses" method="GET">
-      <button type="submit">View Expenses</button>
-    </form>
-
-
-  </form>
-
+    <!-- <div class="status">
+      <span class="tagline">Monochrome pulse</span>
+      <span>Syncing every midnight</span>
+    </div> -->
+  </main>
 </body>
 </html>
